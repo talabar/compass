@@ -1,0 +1,9 @@
+* Specify root folder and autodetects which parsing it needs to do
+  - xml => xml_parser
+  - ltx => ltx_parser
+  - etc.
+
+* Unpacker: Input - Many Files; Output - One File
+* Repacker: Input - One File; Output - Many Files
+
+# Repacker does alignment
