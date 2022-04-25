@@ -31,7 +31,7 @@ class XMLUnpacker:
 
             if file_contents_unpack:
                 LOGGER.info(f"|{self.stem}| Unpacked Successfully")
-                unpack_xml.append(file_title + "\n")
+                unpack_xml.append(dl.FILE_LEFT + " " + file_title + "\n")
                 unpack_xml += file_contents_unpack
 
         return unpack_xml
@@ -51,7 +51,7 @@ class XMLUnpacker:
                 LOGGER.debug(f"|{self.stem}| [{idx}] Match - Simple")
             elif match_multiline:
                 list_multiline = self.process_multiline_match(match_multiline, idx, line_iter)
-                text = "\n".join(list_multiline)
+                text = "\n".join(list_multiline) + "\n"
                 if not rx.has_cyrillic(text):
                     continue
                 LOGGER.debug(f"|{self.stem}| [{idx}] Match - Multiline")
@@ -64,7 +64,7 @@ class XMLUnpacker:
 
     @staticmethod
     def process_simple_match(match: Match, idx: int) -> str:
-        prefix = f"[{idx}]"
+        prefix = f"{dl.LINE_NO_LEFT}{idx}{dl.LINE_NO_RIGHT}"
         text = match.groups()[0]
         text_format = prefix + " " + text + "\n"
         return text_format
@@ -76,7 +76,7 @@ class XMLUnpacker:
         # Handle Starting Line
         text_start = match.groups()[0]
         if text_start:
-            prefix = f"[{idx}]{dl.MULTILINE_START}"
+            prefix = f"{dl.LINE_NO_LEFT}{idx}{dl.LINE_NO_RIGHT}{dl.MULTILINE_START}"
             text = text_start
             text_format = prefix + " " + text
             text_aggregate.append(text_format)
@@ -84,7 +84,7 @@ class XMLUnpacker:
         # Handle Middle Line(s)
         idx, line = next(line_iter)
         while not rx.XML_MULTILINE_END.search(line):
-            prefix = f"[{idx}]{dl.MULTILINE_GENERAL}"
+            prefix = f"{dl.LINE_NO_LEFT}{idx}{dl.LINE_NO_RIGHT}{dl.MULTILINE_GENERAL}"
             text = line[:-1] if line.endswith("\n") else line  # Strip newline, if exists
             text_format = prefix + " " + text
             text_aggregate.append(text_format)
@@ -97,7 +97,7 @@ class XMLUnpacker:
         match_end = rx.XML_MULTILINE_END.search(line)
         text_end = match_end.groups()[0]
         if text_end:
-            prefix = f"[{idx}]{dl.MULTILINE_END}"
+            prefix = f"{dl.LINE_NO_LEFT}{idx}{dl.LINE_NO_RIGHT}{dl.MULTILINE_END}"
             text = text_end
             text_format = prefix + " " + text
             text_aggregate.append(text_format)
