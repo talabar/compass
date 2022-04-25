@@ -14,7 +14,7 @@ class Unpacker:
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
         self.filename_mapping_xml = output_stem + "_mapping.txt"
-        self.filename_corpus_xml = output_stem + "_corpus.text"
+        self.filename_corpus_xml = output_stem + "_corpus.txt"
 
     def unpack(self):
         xml_unpacker = XMLUnpacker(self.filenames_xml)

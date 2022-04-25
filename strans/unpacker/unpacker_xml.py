@@ -55,6 +55,8 @@ class XMLUnpacker:
             else:
                 continue
 
+        self.post_process()
+
     def process_simple_match(self, match: Match, index: int):
         text = match.groups()[0]
 
@@ -91,3 +93,7 @@ class XMLUnpacker:
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: End")
             self.line_mapping.append(str(index) + dl.MULTILINE_END + "\n")
             self.corpus.append(text_end + "\n")
+
+    def post_process(self):
+        for idx, text in enumerate(self.corpus):
+            self.corpus[idx] = text.replace("\\n", dl.NEWLINE)

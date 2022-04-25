@@ -1,3 +1,4 @@
 GLOSSARY = {
-    r"swords?man": "Marked One"
+    r"swords?man": "Marked One",
+    "dolg": "Duty",
 }
