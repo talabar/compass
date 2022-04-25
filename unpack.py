@@ -1,7 +1,6 @@
 import argparse
 from pathlib import Path
 
-from strans.parser_types import type_txt
 from strans.unpacker.unpacker import Unpacker
 
 

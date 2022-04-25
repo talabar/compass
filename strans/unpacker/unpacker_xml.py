@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Iterator, List, Match, Tuple
 
 from strans import delimiter as dl
-from strans import rx
+from strans import regex as rx
 from strans.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class XMLUnpacker:
             with open(filename, "r", encoding="windows-1251", errors="ignore") as input_fp:
                 file_contents = input_fp.readlines()
 
-            file_title = dl.FILE_LEFT + " " + get_file_title(filename) + "\n"
+            file_title = dl.FILE + " " + get_file_title(filename) + "\n"
             self.line_mapping.append(file_title)
             self.corpus.append(file_title)
 
