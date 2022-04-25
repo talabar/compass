@@ -16,9 +16,8 @@ def run():
     )
     parser.add_argument(
         "-out",
-        help="Output file path",
+        help="Output file path stem",
         dest="outfile",
-        type=type_txt,
         required=True,
     )
     args = parser.parse_args()

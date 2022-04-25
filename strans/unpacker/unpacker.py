@@ -10,16 +10,18 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Unpacker:
-    def __init__(self, root: Path, file_output: str):
+    def __init__(self, root: Path, output_stem: str):
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
-        self.file_output = file_output
+        self.filename_mapping_xml = output_stem + "_mapping.txt"
+        self.filename_corpus_xml = output_stem + "_corpus.text"
 
     def unpack(self):
-        corpus_unpack = []
-
         xml_unpacker = XMLUnpacker(self.filenames_xml)
-        corpus_unpack += xml_unpacker.unpack()
+        line_mapping_xml, corpus_xml = xml_unpacker.unpack()
 
-        with open(self.file_output, "w", encoding="windows-1251") as fp:
-            fp.writelines(corpus_unpack)
+        with open(self.filename_mapping_xml, "w+", encoding="windows-1251") as fp:
+            fp.writelines(line_mapping_xml)
+
+        with open(self.filename_corpus_xml, "w+", encoding="windows-1251") as fp:
+            fp.writelines(corpus_xml)
