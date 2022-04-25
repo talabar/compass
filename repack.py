@@ -35,7 +35,7 @@ def run():
 
     with open(args.mapping_xml, "r", encoding="windows-1251") as fp:
         mapping_xml = fp.readlines()
-    with open(args.text_xml, "r", encoding="windows-1251") as fp:
+    with open(args.text_xml, "r", encoding="windows-1251", errors="ignore") as fp:
         text_xml = fp.readlines()
 
     repacker = Repacker(args.root, mapping_xml, text_xml, args.outdir)

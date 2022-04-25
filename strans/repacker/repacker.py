@@ -50,7 +50,7 @@ class Repacker:
                 match = rx.CIPHER_SIMPLE.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.SIMPLE
-                cipher[current_file][index] = (line_type, row_corpus)
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_MULTILINE_GENERAL.match(row_mapping):
                 match = rx.CIPHER_MULTILINE_GENERAL.match(row_mapping)
                 index = int(match.groups(1)[0])
@@ -60,12 +60,12 @@ class Repacker:
                 match = rx.CIPHER_MULTILINE_START.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_START
-                cipher[current_file][index] = (line_type, row_corpus)
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_MULTILINE_END.match(row_mapping):
                 match = rx.CIPHER_MULTILINE_END.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_END
-                cipher[current_file][index] = (line_type, row_corpus)
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             else:
                 raise Exception(
                     "Cipher Error\nInvalid Mapping\n"
