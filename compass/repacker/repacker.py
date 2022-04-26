@@ -3,11 +3,11 @@ from pathlib import Path
 import re
 from typing import List
 
-from strans import delimiter as dl
-from strans import regex as rx
-from strans.datatype import Cipher, TranslateType
-from strans.repacker.repacker_xml import XMLRepacker
-from strans.util import get_file_paths
+from compass import delimiter as dl
+from compass import regex as rx
+from compass.datatype import Cipher, TranslateType
+from compass.repacker.repacker_xml import XMLRepacker
+from compass.util import get_file_paths
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)

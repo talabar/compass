@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from strans.repacker.repacker import Repacker
+from compass.repacker.repacker import Repacker
 
 
 def run():

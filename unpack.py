@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from strans.unpacker.unpacker import Unpacker
+from compass.unpacker.unpacker import Unpacker
 
 
 def run():

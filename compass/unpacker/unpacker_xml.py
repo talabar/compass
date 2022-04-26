@@ -2,9 +2,9 @@ import logging
 from pathlib import Path
 from typing import Iterator, List, Match, Tuple
 
-from strans import delimiter as dl
-from strans import regex as rx
-from strans.util import get_file_title
+from compass import delimiter as dl
+from compass import regex as rx
+from compass.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
 

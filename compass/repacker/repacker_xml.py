@@ -4,8 +4,8 @@ from pathlib import Path
 import re
 from typing import List
 
-from strans import regex as rx
-from strans.datatype import Cipher, TranslateType
+from compass import regex as rx
+from compass.datatype import Cipher, TranslateType
 
 LOGGER = logging.getLogger(__name__)
 

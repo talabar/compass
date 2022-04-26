@@ -2,8 +2,8 @@ import logging
 from pathlib import Path
 from typing import List
 
-from strans.unpacker.unpacker_xml import XMLUnpacker
-from strans.util import get_file_paths
+from compass.unpacker.unpacker_xml import XMLUnpacker
+from compass.util import get_file_paths
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
