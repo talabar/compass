@@ -1,4 +1,5 @@
 GLOSSARY = {
-    r"swords?man": "Marked One",
-    "dolg": "Duty",
+    r"[Ss]words?man": "Marked One",
+    r"[Dd]olg": "Duty",
+    r"[Ss]wordy": "Marked",
 }
