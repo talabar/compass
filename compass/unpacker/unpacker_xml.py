@@ -17,7 +17,7 @@ class XMLUnpacker:
         self.corpus = []
 
     def unpack(self) -> Tuple[List[str], List[str]]:
-        LOGGER.info(f"Starting...")
+        LOGGER.info(f"XML Unpacker Starting...")
 
         for filename in self.filenames:
 
@@ -52,8 +52,6 @@ class XMLUnpacker:
                 self.process_simple_match(match_simple, index)
             elif match_multiline:
                 self.process_multiline_match(match_multiline, index, line_iter)
-            else:
-                continue
 
         self.post_process()
 
