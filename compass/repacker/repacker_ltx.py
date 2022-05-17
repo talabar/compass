@@ -10,17 +10,17 @@ from compass.datatype import Cipher, TranslateType
 LOGGER = logging.getLogger(__name__)
 
 
-class XMLRepacker:
+class LTXRepacker:
     def __init__(self, filenames: List[Path], cipher: Cipher, output_root: str):
         self.filenames_base = filenames
         self.cipher = cipher
         self.output_root = output_root
 
     def repack(self):
-        LOGGER.info("Starting...")
+        LOGGER.info("Repacker LTX Starting...")
 
         for filename, translate_instr in self.cipher.items():
-            if not filename.endswith(".xml"):
+            if not filename.endswith(".ltx"):
                 continue
 
             contents = self.get_base_contents(filename)
@@ -28,13 +28,7 @@ class XMLRepacker:
             for line_number, (line_type, text) in translate_instr.items():
                 line = contents[line_number - 1]
                 if line_type is TranslateType.SIMPLE:
-                    line_translate = self._text_replace(rx.XML_SIMPLE, text, line)
-                elif line_type is TranslateType.MULTILINE_GENERAL:
-                    line_translate = text
-                elif line_type is TranslateType.MULTILINE_START:
-                    line_translate = self._text_replace(rx.XML_MULTILINE_START, text, line)
-                elif line_type is TranslateType.MULTILINE_END:
-                    line_translate = self._text_replace(rx.XML_MULTILINE_END, text, line)
+                    line_translate = self._text_replace(rx.LTX_INV_NAME, text, line)
                 else:
                     raise Exception(
                         "Cipher Error\n"

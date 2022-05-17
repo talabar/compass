@@ -6,6 +6,7 @@ from typing import List
 from compass import delimiter as dl
 from compass import regex as rx
 from compass.datatype import Cipher, TranslateType
+from compass.repacker.repacker_ltx import LTXRepacker
 from compass.repacker.repacker_xml import XMLRepacker
 from compass.util import get_file_paths
 
@@ -14,16 +15,19 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Repacker:
-    def __init__(self, root: Path, mapping_xml: List[str], corpus_xml: List[str], output_root: str):
+    def __init__(self, root: Path, mapping: List[str], corpus: List[str], output_root: str):
 
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
-        # self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
-        self.cipher_xml: Cipher = self.create_cipher(mapping_xml, corpus_xml)
+        self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
+        self.cipher: Cipher = self.create_cipher(mapping, corpus)
         self.output_root = output_root
 
     def repack(self):
-        xml_repacker = XMLRepacker(self.filenames_xml, self.cipher_xml, self.output_root)
+        xml_repacker = XMLRepacker(self.filenames_xml, self.cipher, self.output_root)
         xml_repacker.repack()
+
+        ltx_repacker = LTXRepacker(self.filenames_ltx, self.cipher, self.output_root)
+        ltx_repacker.repack()
 
     def create_cipher(self, mapping: List[str], corpus: List[str]) -> Cipher:
         self.check_alignment(mapping, corpus)
