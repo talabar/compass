@@ -70,6 +70,11 @@ class Repacker:
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_END
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
+            elif rx.CIPHER_PDF_MSG.match(row_mapping):
+                match = rx.CIPHER_PDF_MSG.match(row_mapping)
+                index = int(match.groups(1)[0])
+                line_type = TranslateType.PDF_MSG
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             else:
                 raise Exception(
                     "Cipher Error\nInvalid Mapping\n"

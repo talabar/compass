@@ -20,25 +20,25 @@ def run():
         required=True,
     )
     parser.add_argument(
-        "-map-xml",
-        help="Mapping File for XML Content",
-        dest="mapping_xml",
+        "-map",
+        help="Mapping File",
+        dest="mapping",
         required=True,
     )
     parser.add_argument(
-        "-text-xml",
+        "-text",
         help="Translated Text Corpus",
-        dest="text_xml",
+        dest="text",
         required=True,
     )
     args = parser.parse_args()
 
-    with open(args.mapping_xml, "r", encoding="windows-1251") as fp:
-        mapping_xml = fp.readlines()
-    with open(args.text_xml, "r", encoding="windows-1251", errors="ignore") as fp:
-        text_xml = fp.readlines()
+    with open(args.mapping, "r", encoding="windows-1251") as fp:
+        mapping = fp.readlines()
+    with open(args.text, "r", encoding="windows-1251", errors="ignore") as fp:
+        text = fp.readlines()
 
-    repacker = Repacker(args.root, mapping_xml, text_xml, args.outdir)
+    repacker = Repacker(args.root, mapping, text, args.outdir)
     repacker.repack()
 
 

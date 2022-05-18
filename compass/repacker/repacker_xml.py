@@ -27,6 +27,8 @@ class XMLRepacker(BaseRepacker):
                     line_translate = self._text_replace(rx.XML_MULTILINE_START, text, line)
                 elif line_type is TranslateType.MULTILINE_END:
                     line_translate = self._text_replace(rx.XML_MULTILINE_END, text, line)
+                elif line_type is TranslateType.PDF_MSG:
+                    line_translate = self._text_replace(rx.XML_PDF_MSG, text, line)
                 else:
                     raise Exception(
                         "Cipher Error\n"
