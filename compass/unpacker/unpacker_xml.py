@@ -1,46 +1,19 @@
 import logging
 from pathlib import Path
-from typing import Iterator, List, Match, Tuple
+from typing import Iterator, List, Match
 
 from compass import delimiter as dl
 from compass import regex as rx
-from compass.util import get_file_title
+from compass.unpacker.unpacker_base import BaseUnpacker
+from compass.util import get_file_paths
 
 LOGGER = logging.getLogger(__name__)
 
 
-class XMLUnpacker:
-    def __init__(self, filenames: List[Path]):
-        self.filenames = filenames
-        self.stem = None
-        self.line_mapping = []
-        self.corpus = []
-
-    def unpack(self) -> Tuple[List[str], List[str]]:
-        LOGGER.info(f"XML Unpacker Starting...")
-
-        for filename in self.filenames:
-
-            self.stem = filename.stem
-
-            LOGGER.info(f"|{self.stem}| Loading...")
-
-            with open(filename, "r", encoding="windows-1251", errors="ignore") as input_fp:
-                file_contents = input_fp.readlines()
-
-            file_title = dl.FILE + " " + get_file_title(filename) + "\n"
-            self.line_mapping.append(file_title)
-            self.corpus.append(file_title)
-
-            self.unpack_file_contents(file_contents)
-
-            if self.line_mapping[-1] == file_title:
-                self.line_mapping.pop()
-                self.corpus.pop()
-            else:
-                LOGGER.info(f"|{self.stem}| Unpacked Successfully")
-
-        return self.line_mapping, self.corpus
+class XMLUnpacker(BaseUnpacker):
+    def __init__(self, root: Path):
+        super().__init__(root)
+        self.filenames: List[Path] = get_file_paths(root, ".xml")
 
     def unpack_file_contents(self, contents: List[str]):
         line_iter: Iterator[str] = iter(enumerate(contents, start=1))

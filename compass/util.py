@@ -14,9 +14,10 @@ def get_file_paths(path: Path, ext: str):
     return file_paths
 
 
-def get_file_title(path: Path, root: str = "gamedata"):
+def get_file_title(path: Path, root: Path):
+    root_suffix = root.parts[-1]
     parts = path.parts
-    idx = parts.index(root)
+    idx = parts.index(root_suffix)
     parts_sliced = parts[idx:]
     title = os.path.sep.join(parts_sliced)
     return title
