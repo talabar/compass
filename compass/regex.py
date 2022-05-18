@@ -10,6 +10,7 @@ LTX_INV_NAME = re.compile(r"inv_name(?:_short)?\s*=\s*([^;\n]+)")
 XML_SIMPLE = re.compile("<text>(.*)</text>")
 XML_MULTILINE_START = re.compile("<text>(.*)")
 XML_MULTILINE_END = re.compile(r"(.*)</text>")
+XML_PDF_MSG = re.compile(r"\s*<string id=\".+\">(.+)</string>")
 
 
 def has_cyrillic(text):

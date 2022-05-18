@@ -20,11 +20,14 @@ class XMLUnpacker(BaseUnpacker):
         for index, line in line_iter:
             match_simple = rx.XML_SIMPLE.search(line)
             match_multiline = rx.XML_MULTILINE_START.search(line)
+            match_pdf_msg = rx.XML_PDF_MSG.search(line)
 
             if match_simple:
                 self.process_simple_match(match_simple, index)
             elif match_multiline:
                 self.process_multiline_match(match_multiline, index, line_iter)
+            elif match_pdf_msg:
+                self.process_pdf_msg(match_pdf_msg, index)
 
         self.post_process()
 
@@ -34,6 +37,14 @@ class XMLUnpacker(BaseUnpacker):
         if rx.has_cyrillic(text):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Simple")
             self.line_mapping.append(str(index) + "\n")
+            self.corpus.append(text + "\n")
+
+    def process_pdf_msg(self, match: Match, index: int):
+        text = match.groups()[0]
+
+        if rx.has_cyrillic(text):
+            LOGGER.debug(f"|{self.stem}| [{index}] Match - PDF MSG")
+            self.line_mapping.append(str(index) + dl.PDF_MSG + "\n")
             self.corpus.append(text + "\n")
 
     def process_multiline_match(self, match: Match, index: int, line_iter: Iterator[str]):
