@@ -5,6 +5,7 @@ CIPHER_MULTILINE_GENERAL = re.compile(r"^(\d+):ML:$")
 CIPHER_MULTILINE_START = re.compile(r"^(\d+):MLS:$")
 CIPHER_MULTILINE_END = re.compile(r"^(\d+):MLE:$")
 CIPHER_PDF_MSG = re.compile(r"^(\d+):PDF:$")
+CIPHER_SCRIPT = re.compile(r"^(\d+)_(\d+)$")
 
 LTX_INV_NAME = re.compile(r"inv_name(?:_short)?\s*=\s*([^;\n]+)")
 
