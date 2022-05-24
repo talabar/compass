@@ -77,10 +77,10 @@ class Repacker:
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_SCRIPT.match(row_mapping):
                 match = rx.CIPHER_SCRIPT.match(row_mapping)
-                index_line = int(match.groups(1)[0])
-                index_match = int(match.groups(1)[1])
+                index_line = int(match.groups()[0])
+                index_match = int(match.groups()[1])
                 line_type = TranslateType.SCRIPT
-                if cipher[current_file][index_line] is None:
+                if index_line not in cipher[current_file].keys():
                     cipher[current_file][index_line] = (line_type, {})
                 line_mapping = cipher[current_file][index_line][1]
                 line_mapping[index_match] = row_corpus[:-1]
