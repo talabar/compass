@@ -13,6 +13,9 @@ XML_MULTILINE_START = re.compile("<text>(.*)")
 XML_MULTILINE_END = re.compile(r"(.*)</text>")
 XML_PDF_MSG = re.compile(r"\s*<string id=\".+\">(.+)</string>")
 
+SCRIPT_COMMENT = re.compile(r"\s*--")
+SCRIPT_SIMPLE = re.compile(r'"((?:[^"\\]|\\.)*)"')
+
 
 def has_cyrillic(text):
     return bool(re.search('[\u0400-\u04FF]', text))

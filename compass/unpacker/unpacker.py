@@ -3,6 +3,7 @@ from pathlib import Path
 
 from compass.unpacker.unpacker_ltx import LTXUnpacker
 from compass.unpacker.unpacker_xml import XMLUnpacker
+from compass.unpacker.unpacker_script import ScriptUnpacker
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
@@ -21,8 +22,11 @@ class Unpacker:
         ltx_unpacker = LTXUnpacker(self.root)
         mapping_ltx, corpus_ltx = ltx_unpacker.unpack()
 
-        mapping = mapping_xml + mapping_ltx
-        corpus = corpus_xml + corpus_ltx
+        script_unpacker = ScriptUnpacker(self.root)
+        mapping_script, corpus_script = script_unpacker.unpack()
+
+        mapping = mapping_xml + mapping_ltx + mapping_script
+        corpus = corpus_xml + corpus_ltx + corpus_script
 
         with open(self.filename_mapping, "w+", encoding="windows-1251") as fp:
             fp.writelines(mapping)
