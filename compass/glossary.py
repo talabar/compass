@@ -3,6 +3,7 @@ GLOSSARY = {
     r"[Dd]olg": "Duty",
     r"[Ee]jection": "blowout",
     r"an blowout": "a blowout",
+    r"[Ll]iberty": "Freedom",
     r"Shooter": "Strelok",
     r"[Ss]words?man": "Marked One",
     r"[Ss]wordy": "Marked",

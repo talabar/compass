@@ -18,8 +18,8 @@ class XMLUnpacker(BaseUnpacker):
     def unpack_file_contents(self, contents: List[str]):
         line_iter: Iterator[str] = iter(enumerate(contents, start=1))
         for index, line in line_iter:
-            match_simple = rx.XML_SIMPLE.search(line)
-            match_multiline = rx.XML_MULTILINE_START.search(line)
+            match_simple = rx.XML_TEXT_SIMPLE.search(line)
+            match_multiline = rx.XML_TEXT_MULTILINE_START.search(line)
             match_pdf_msg = rx.XML_PDF_MSG.search(line)
 
             if match_simple:
@@ -29,7 +29,7 @@ class XMLUnpacker(BaseUnpacker):
             elif match_pdf_msg:
                 self.process_pdf_msg(match_pdf_msg, index)
 
-        self.post_process()
+        # self.post_process()
 
     def process_simple_match(self, match: Match, index: int):
         text = match.groups()[0]
@@ -57,7 +57,7 @@ class XMLUnpacker(BaseUnpacker):
 
         # Handle Middle Line(s)
         index, line = next(line_iter)
-        while not rx.XML_MULTILINE_END.search(line):
+        while not rx.XML_TEXT_MULTILINE_END.search(line):
             if rx.has_cyrillic(line):
                 LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: General")
                 text = line[:-1] if line.endswith("\n") else line
@@ -69,13 +69,10 @@ class XMLUnpacker(BaseUnpacker):
                 return
 
         # Handle End Line
-        match_end = rx.XML_MULTILINE_END.search(line)
+        match_end = rx.XML_TEXT_MULTILINE_END.search(line)
         text_end = match_end.groups()[0]
         if text_end and rx.has_cyrillic(text_end):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: End")
             self.line_mapping.append(str(index) + dl.MULTILINE_END + "\n")
             self.corpus.append(text_end + "\n")
 
-    def post_process(self):
-        for idx, text in enumerate(self.corpus):
-            self.corpus[idx] = text.replace("\\n", dl.NEWLINE)

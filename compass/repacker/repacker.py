@@ -8,6 +8,7 @@ from compass import regex as rx
 from compass.datatype import Cipher, TranslateType
 from compass.repacker.repacker_ltx import LTXRepacker
 from compass.repacker.repacker_xml import XMLRepacker
+from compass.repacker.repacker_script import ScriptRepacker
 from compass.util import get_file_paths
 
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +20,7 @@ class Repacker:
 
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
+        self.filenames_script: List[Path] = get_file_paths(root, ".script")
         self.cipher: Cipher = self.create_cipher(mapping, corpus)
         self.output_root = output_root
 
@@ -29,8 +31,12 @@ class Repacker:
         ltx_repacker = LTXRepacker(self.filenames_ltx, self.cipher, self.output_root)
         ltx_repacker.repack()
 
+        script_repacker = ScriptRepacker(self.filenames_script, self.cipher, self.output_root)
+        script_repacker.repack()
+
     def create_cipher(self, mapping: List[str], corpus: List[str]) -> Cipher:
         self.check_alignment(mapping, corpus)
+        self.pre_process(corpus)
 
         cipher = {}
         num_lines = len(mapping)
@@ -44,34 +50,34 @@ class Repacker:
             row_mapping = next(iter_mapping)
             row_corpus = next(iter_corpus)
 
-            row_corpus = row_corpus.replace(dl.NEWLINE, "\\n")
+            row_corpus = row_corpus.replace(dl.NEWLINE_PADDED, "\\n")
 
             if re.match(dl.FILE, row_mapping):
                 # Create new outer dictionary entry
                 current_file = row_mapping.split()[1]
                 cipher[current_file] = {}
-            elif rx.CIPHER_SIMPLE.match(row_mapping):
-                match = rx.CIPHER_SIMPLE.match(row_mapping)
+            elif rx.CIPHER_XML_TEXT_SIMPLE.match(row_mapping):
+                match = rx.CIPHER_XML_TEXT_SIMPLE.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.SIMPLE
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
-            elif rx.CIPHER_MULTILINE_GENERAL.match(row_mapping):
-                match = rx.CIPHER_MULTILINE_GENERAL.match(row_mapping)
+            elif rx.CIPHER_XML_TEXT_MULTILINE_GENERAL.match(row_mapping):
+                match = rx.CIPHER_XML_TEXT_MULTILINE_GENERAL.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_GENERAL
                 cipher[current_file][index] = (line_type, row_corpus)
-            elif rx.CIPHER_MULTILINE_START.match(row_mapping):
-                match = rx.CIPHER_MULTILINE_START.match(row_mapping)
+            elif rx.CIPHER_XML_TEXT_MULTILINE_START.match(row_mapping):
+                match = rx.CIPHER_XML_TEXT_MULTILINE_START.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_START
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
-            elif rx.CIPHER_MULTILINE_END.match(row_mapping):
-                match = rx.CIPHER_MULTILINE_END.match(row_mapping)
+            elif rx.CIPHER_XML_TEXT_MULTILINE_END.match(row_mapping):
+                match = rx.CIPHER_XML_TEXT_MULTILINE_END.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.MULTILINE_END
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
-            elif rx.CIPHER_PDF_MSG.match(row_mapping):
-                match = rx.CIPHER_PDF_MSG.match(row_mapping)
+            elif rx.CIPHER_XML_PDF_MSG.match(row_mapping):
+                match = rx.CIPHER_XML_PDF_MSG.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.PDF_MSG
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
@@ -102,3 +108,15 @@ class Repacker:
                 "Alignment Error\nLength\n"
                 f"Mapping: {count_mapping} <-/-> Corpus: {count_corpus}"
             )
+
+    @staticmethod
+    def pre_process(corpus: List[str]):
+        for idx, text in enumerate(corpus):
+            corpus[idx] = corpus[idx].replace('"', "")
+
+            corpus[idx] = re.sub(r"(\s*REPL_NEWLINE\s*)", lambda match: match.group(0).strip(), corpus[idx])
+
+            corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\\\n")
+            corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\\\"")
+            corpus[idx] = re.sub(rx.GENERAL_PERCENT_C_PADDED, lambda match: match.group(0).strip(), corpus[idx])

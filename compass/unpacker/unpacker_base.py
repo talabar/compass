@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 import logging
 from pathlib import Path
+import re
 from typing import List, Tuple
 
 from compass import delimiter as dl
+from compass import regex as rx
 from compass.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
@@ -43,8 +45,16 @@ class BaseUnpacker(ABC):
             else:
                 LOGGER.info(f"|{filename.parts[-1]}| Unpacked Successfully")
 
+        self.post_process()
         return self.line_mapping, self.corpus
 
     @abstractmethod
     def unpack_file_contents(self, contents: List[str]):
         pass
+
+    def post_process(self):
+        for idx, text in enumerate(self.corpus):
+            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_PADDED)
+            self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE_PADDED)
+            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_PADDED)
+            self.corpus[idx] = re.sub(rx.GENERAL_PERCENT_C, lambda match: " " + match.group(0) + " ", self.corpus[idx])

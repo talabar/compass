@@ -2,7 +2,6 @@ import logging
 from pathlib import Path
 from typing import List
 
-from compass import delimiter as dl
 from compass import regex as rx
 from compass.unpacker.unpacker_base import BaseUnpacker
 from compass.util import get_file_paths
@@ -30,5 +29,4 @@ class ScriptUnpacker(BaseUnpacker):
             if rx.has_cyrillic(match):
                 LOGGER.debug(f"|{self.stem}| [{index_line}][{index_group} Match - Script")
                 self.line_mapping.append(f"{str(index_line)}_{str(index_group)}\n")
-                match = match.replace("\\\\n", dl.NEWLINE)
                 self.corpus.append(match + "\n")
