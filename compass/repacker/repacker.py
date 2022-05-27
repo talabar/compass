@@ -112,11 +112,15 @@ class Repacker:
     @staticmethod
     def pre_process(corpus: List[str]):
         for idx, text in enumerate(corpus):
+            # Strip out DeepL added quotes
             corpus[idx] = corpus[idx].replace('"', "")
 
+            # Strip out Whitespace Buffer where appropriate
             corpus[idx] = re.sub(r"(\s*REPL_NEWLINE\s*)", lambda match: match.group(0).strip(), corpus[idx])
-
-            corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\\\n")
-            corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
-            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\\\"")
             corpus[idx] = re.sub(rx.GENERAL_PERCENT_C_PADDED, lambda match: match.group(0).strip(), corpus[idx])
+
+            # Hydrate Replacement Vars
+            corpus[idx] = corpus[idx].replace(dl.NEWLINE_ESCAPE, "\\\\n")
+            corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION_ESCAPE, "\\\"")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\\\"")

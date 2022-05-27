@@ -4,10 +4,11 @@ GLOSSARY = {
     r"[Ee]jection": "blowout",
     r"an blowout": "a blowout",
     r"[Ll]iberty": "Freedom",
+    r"Pussy": "the Gut",
+    r"[Tt]he [Tt]he [Gg]ut": "the Gut",
     r"Shooter": "Strelok",
-    r"[Ss]words?man": "Marked One",
+    r"[Ss]words?man|[Ss]wabbed": "Marked One",
     r"[Ss]wordy": "Marked",
-    r"[Ss]wabbed": "Marked One",
 }
 
 DEEPL_ERRORS = {

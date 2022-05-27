@@ -54,7 +54,8 @@ class BaseUnpacker(ABC):
 
     def post_process(self):
         for idx, text in enumerate(self.corpus):
-            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_PADDED)
+            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE_PADDED)
             self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE_PADDED)
-            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_PADDED)
+            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_ESCAPE_PADDED)
+            self.corpus[idx] = self.corpus[idx].replace("\"", dl.QUOTATION_PADDED)
             self.corpus[idx] = re.sub(rx.GENERAL_PERCENT_C, lambda match: " " + match.group(0) + " ", self.corpus[idx])
