@@ -59,7 +59,7 @@ class Repacker:
                 current_file = row_mapping.split()[1]
                 cipher[current_file] = {}
             elif rx.CIPHER_XML_CATCH_ALL.match(row_mapping):
-                match = rx.CIPHER_XML_PDF_MSG.match(row_mapping)
+                match = rx.CIPHER_XML_CATCH_ALL.match(row_mapping)
                 index = int(match.groups(1)[0])
                 line_type = TranslateType.XML_CATCH_ALL
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
@@ -92,6 +92,11 @@ class Repacker:
                     cipher[current_file][index_line] = (line_type, {})
                 line_mapping = cipher[current_file][index_line][1]
                 line_mapping[index_match] = row_corpus[:-1]
+            elif rx.CIPHER_LTX_INV_NAME.match(row_mapping):
+                match = rx.CIPHER_LTX_INV_NAME.match(row_mapping)
+                index = int(match.groups()[0])
+                line_type = TranslateType.LTX_INV_NAME
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             else:
                 raise Exception(
                     "Cipher Error\nInvalid Mapping\n"

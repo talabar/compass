@@ -1,5 +1,6 @@
 import re
 
+CIPHER_LTX_INV_NAME = re.compile(r"^(\d+):IN:$")
 CIPHER_SCRIPT = re.compile(r"^(\d+)_(\d+)$")
 CIPHER_XML_CATCH_ALL = re.compile(r"^(\d+):CA:$")
 CIPHER_XML_TEXT_SIMPLE = re.compile(r"^(\d+):SL:$")

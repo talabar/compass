@@ -3,6 +3,7 @@ from typing import Dict, Tuple, Union
 
 
 class TranslateType(Enum):
+    LTX_INV_NAME = "LTX_INV_NAME"
     SCRIPT = "SCRIPT"
     XML_CATCH_ALL = "XML_CATCH_ALL"
     XML_TEXT_SIMPLE = "XML_TEXT_SIMPLE"
