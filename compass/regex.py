@@ -14,6 +14,7 @@ GENERAL_PERCENT_C_PADDED = re.compile(r"(\s*%c\[.+?]\s*)")
 LTX_INV_NAME = re.compile(r"inv_name(?:_short)?\s*=\s*([^;\n]+)")
 
 SCRIPT_COMMENT = re.compile(r"\s*--|\s*#")
+SCRIPT_DBG = re.compile(r"~C0C|\[~T|#DBG")
 SCRIPT_SIMPLE = re.compile(r'"((?:[^"\\]|\\.)*)"')
 
 XML_CATCH_ALL = re.compile(">(.*)</")

@@ -6,6 +6,7 @@ from typing import List, Tuple
 
 from compass import delimiter as dl
 from compass import regex as rx
+from compass.glossary import GLOSSARY, GLOSSARY_MATCH
 from compass.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
@@ -56,6 +57,16 @@ class BaseUnpacker(ABC):
         for idx, text in enumerate(self.corpus):
             self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE_PADDED)
             self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE_PADDED)
-            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_ESCAPE_PADDED)
-            self.corpus[idx] = self.corpus[idx].replace("\"", dl.QUOTATION_PADDED)
             self.corpus[idx] = re.sub(rx.GENERAL_PERCENT_C, lambda match: " " + match.group(0) + " ", self.corpus[idx])
+
+            # DELETE QUOTES - DEEPL SUCKS AT HANDLING THEM
+            self.corpus[idx] = self.corpus[idx].replace("\\\"", "")
+            self.corpus[idx] = self.corpus[idx].replace("\"", "")
+
+            for russian_text, english_translation in GLOSSARY.items():
+                self.corpus[idx] = re.sub(russian_text, english_translation, self.corpus[idx])
+
+            for russian_text, english_translation in GLOSSARY_MATCH.items():
+                self.corpus[idx] = re.sub(
+                    russian_text, lambda match: english_translation + match.group(1), self.corpus[idx]
+                )

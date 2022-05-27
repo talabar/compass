@@ -6,6 +6,7 @@ from typing import List
 from compass import delimiter as dl
 from compass import regex as rx
 from compass.datatype import Cipher, TranslateType
+from compass.glossary import DEEPL_ERRORS
 from compass.repacker.repacker_ltx import LTXRepacker
 from compass.repacker.repacker_xml import XMLRepacker
 from compass.repacker.repacker_script import ScriptRepacker
@@ -21,8 +22,9 @@ class Repacker:
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
         self.filenames_script: List[Path] = get_file_paths(root, ".script")
-        self.cipher: Cipher = self.create_cipher(mapping, corpus)
         self.output_root = output_root
+
+        self.cipher: Cipher = self.create_cipher(mapping, corpus)
 
     def repack(self):
         xml_repacker = XMLRepacker(self.filenames_xml, self.cipher, self.output_root)
@@ -112,8 +114,10 @@ class Repacker:
     @staticmethod
     def pre_process(corpus: List[str]):
         for idx, text in enumerate(corpus):
-            # Strip out DeepL added quotes
-            corpus[idx] = corpus[idx].replace('"', "")
+
+            # Fix Common DeepL Translation Quirks
+            for find, repl in DEEPL_ERRORS.items():
+                corpus[idx] = re.sub(find, repl, corpus[idx])
 
             # Strip out Whitespace Buffer where appropriate
             corpus[idx] = re.sub(r"(\s*REPL_NEWLINE\s*)", lambda match: match.group(0).strip(), corpus[idx])
@@ -122,5 +126,3 @@ class Repacker:
             # Hydrate Replacement Vars
             corpus[idx] = corpus[idx].replace(dl.NEWLINE_ESCAPE, "\\\\n")
             corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
-            corpus[idx] = corpus[idx].replace(dl.QUOTATION_ESCAPE, "\\\"")
-            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\\\"")
