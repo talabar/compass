@@ -46,3 +46,10 @@ DEEPL_ERRORS = {
     # r"\s*В[\u0400-\u04FFВ¶®©]*\s*": "",
     # r"Р[^\x00-\x7F]": "Ah",
 }
+
+# TODO: Implement this in Repacker 'pre-process'
+TRANSLATOR = {
+    re.compile(r"^Download$"): "Load",
+    re.compile(r"^Titles$"): "Credits",
+    re.compile(r"Shooter"): "Strelok",
+}
