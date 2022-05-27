@@ -19,16 +19,16 @@ class XMLRepacker(BaseRepacker):
 
             for line_number, (line_type, text) in translate_instr.items():
                 line = contents[line_number - 1]
-                if line_type is TranslateType.SIMPLE:
+                if line_type is TranslateType.XML_TEXT_SIMPLE:
                     line_translate = self._text_replace(rx.XML_TEXT_SIMPLE, text, line)
-                elif line_type is TranslateType.MULTILINE_GENERAL:
+                elif line_type is TranslateType.XML_CATCH_ALL:
+                    line_translate = self._text_replace(rx.XML_CATCH_ALL, text, line)
+                elif line_type is TranslateType.XML_TEXT_MULTILINE_GENERAL:
                     line_translate = text
-                elif line_type is TranslateType.MULTILINE_START:
+                elif line_type is TranslateType.XML_TEXT_MULTILINE_START:
                     line_translate = self._text_replace(rx.XML_TEXT_MULTILINE_START, text, line)
-                elif line_type is TranslateType.MULTILINE_END:
+                elif line_type is TranslateType.XML_TEXT_MULTILINE_END:
                     line_translate = self._text_replace(rx.XML_TEXT_MULTILINE_END, text, line)
-                elif line_type is TranslateType.PDF_MSG:
-                    line_translate = self._text_replace(rx.XML_PDF_MSG, text, line)
                 else:
                     raise Exception(
                         "Cipher Error\n"

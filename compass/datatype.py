@@ -3,14 +3,13 @@ from typing import Dict, Tuple, Union
 
 
 class TranslateType(Enum):
-    SIMPLE = "SIMPLE"
-    MULTILINE_GENERAL = "MULTILINE_GENERAL"
-    MULTILINE_START = "MULTILINE_START"
-    MULTILINE_END = "MULTILINE_END"
-    PDF_MSG = "PDF_MSG"
     SCRIPT = "SCRIPT"
+    XML_CATCH_ALL = "XML_CATCH_ALL"
+    XML_TEXT_SIMPLE = "XML_TEXT_SIMPLE"
+    XML_TEXT_MULTILINE_GENERAL = "XML_TEXT_MULTILINE_GENERAL"
+    XML_TEXT_MULTILINE_START = "XML_TEXT_MULTILINE_START"
+    XML_TEXT_MULTILINE_END = "XML_TEXT_MULTILINE_END"
 
 
 Instr_Script = Dict[int, str]
-# Cipher = Dict[str, Dict[int, Tuple[TranslateType, str]]]
 Cipher = Dict[str, Dict[int, Tuple[TranslateType, Union[str, Instr_Script]]]]

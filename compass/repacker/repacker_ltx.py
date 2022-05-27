@@ -19,7 +19,7 @@ class LTXRepacker(BaseRepacker):
 
             for line_number, (line_type, text) in translate_instr.items():
                 line = contents[line_number - 1]
-                if line_type is TranslateType.SIMPLE:
+                if line_type is TranslateType.XML_CATCH_ALL:
                     line_translate = self._text_replace(rx.LTX_INV_NAME, text, line)
                 else:
                     raise Exception(

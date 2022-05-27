@@ -56,30 +56,30 @@ class Repacker:
                 # Create new outer dictionary entry
                 current_file = row_mapping.split()[1]
                 cipher[current_file] = {}
+            elif rx.CIPHER_XML_CATCH_ALL.match(row_mapping):
+                match = rx.CIPHER_XML_PDF_MSG.match(row_mapping)
+                index = int(match.groups(1)[0])
+                line_type = TranslateType.XML_CATCH_ALL
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_XML_TEXT_SIMPLE.match(row_mapping):
                 match = rx.CIPHER_XML_TEXT_SIMPLE.match(row_mapping)
                 index = int(match.groups(1)[0])
-                line_type = TranslateType.SIMPLE
+                line_type = TranslateType.XML_TEXT_SIMPLE
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_XML_TEXT_MULTILINE_GENERAL.match(row_mapping):
                 match = rx.CIPHER_XML_TEXT_MULTILINE_GENERAL.match(row_mapping)
                 index = int(match.groups(1)[0])
-                line_type = TranslateType.MULTILINE_GENERAL
+                line_type = TranslateType.XML_TEXT_MULTILINE_GENERAL
                 cipher[current_file][index] = (line_type, row_corpus)
             elif rx.CIPHER_XML_TEXT_MULTILINE_START.match(row_mapping):
                 match = rx.CIPHER_XML_TEXT_MULTILINE_START.match(row_mapping)
                 index = int(match.groups(1)[0])
-                line_type = TranslateType.MULTILINE_START
+                line_type = TranslateType.XML_TEXT_MULTILINE_START
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_XML_TEXT_MULTILINE_END.match(row_mapping):
                 match = rx.CIPHER_XML_TEXT_MULTILINE_END.match(row_mapping)
                 index = int(match.groups(1)[0])
-                line_type = TranslateType.MULTILINE_END
-                cipher[current_file][index] = (line_type, row_corpus[:-1])
-            elif rx.CIPHER_XML_PDF_MSG.match(row_mapping):
-                match = rx.CIPHER_XML_PDF_MSG.match(row_mapping)
-                index = int(match.groups(1)[0])
-                line_type = TranslateType.PDF_MSG
+                line_type = TranslateType.XML_TEXT_MULTILINE_END
                 cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_SCRIPT.match(row_mapping):
                 match = rx.CIPHER_SCRIPT.match(row_mapping)
