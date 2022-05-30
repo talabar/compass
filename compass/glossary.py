@@ -49,7 +49,12 @@ DEEPL_ERRORS = {
 
 # TODO: Implement this in Repacker 'pre-process'
 TRANSLATOR = {
-    re.compile(r"^Download$"): "Load",
-    re.compile(r"^Titles$"): "Credits",
+    re.compile(r"Hog"): "Borov",
+    re.compile(r"Kishka"): "The Gut",
+    re.compile(r"Pussy"): "Gut",
     re.compile(r"Shooter"): "Strelok",
+    re.compile(r"[Ss]words?man"): "Marked One",
+    re.compile(r"^Download$"): "Load",
+    re.compile(r"^Swabbed$"): "Marked One",
+    re.compile(r"^Titles$"): "Credits",
 }
