@@ -20,12 +20,15 @@ class XMLUnpacker(BaseUnpacker):
         for index, line in line_iter:
             match_simple_text = rx.XML_TEXT_SIMPLE.search(line)
             match_catch_all = rx.XML_CATCH_ALL.search(line)
+            match_article = rx.XML_ARTICLE_NAME.search(line)
             match_multiline = rx.XML_TEXT_MULTILINE_START.search(line)
 
             if match_simple_text:
                 self.process_simple_match(match_simple_text, index)
             elif match_multiline:
                 self.process_multiline_match(match_multiline, index, line_iter)
+            elif match_article:
+                self.process_article(match_article, index)
             # TODO: Fix this eventually via more strict regex
             # This MUST remain a condition that follows simple text - otherwise simple text will fall into catch all
             elif match_catch_all:
@@ -36,7 +39,15 @@ class XMLUnpacker(BaseUnpacker):
 
         if rx.has_cyrillic(text):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Simple")
-            self.line_mapping.append(str(index) + dl.SINGLELINE_GENERAL + "\n")
+            self.line_mapping.append(str(index) + dl.XML_SINGLELINE_GENERAL + "\n")
+            self.corpus.append(text + "\n")
+
+    def process_article(self, match: Match, index: int):
+        text = match.groups()[0]
+
+        if rx.has_cyrillic(text):
+            LOGGER.debug(f"|{self.stem}| [{index}] Match - Article")
+            self.line_mapping.append(str(index) + dl.XML_ARTICLE_NAME + "\n")
             self.corpus.append(text + "\n")
 
     def process_catch_all(self, match: Match, index: int):
@@ -44,7 +55,7 @@ class XMLUnpacker(BaseUnpacker):
 
         if rx.has_cyrillic(text):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Catch All")
-            self.line_mapping.append(str(index) + dl.CATCH_ALL + "\n")
+            self.line_mapping.append(str(index) + dl.XML_CATCH_ALL + "\n")
             self.corpus.append(text + "\n")
 
     def process_multiline_match(self, match: Match, index: int, line_iter: Iterator[str]):
@@ -52,7 +63,7 @@ class XMLUnpacker(BaseUnpacker):
         text_start = match.groups()[0]
         if text_start and rx.has_cyrillic(text_start):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: Start")
-            self.line_mapping.append(str(index) + dl.MULTILINE_START + "\n")
+            self.line_mapping.append(str(index) + dl.XML_MULTILINE_START + "\n")
             self.corpus.append(text_start + "\n")
 
         # Handle Middle Line(s)
@@ -61,7 +72,7 @@ class XMLUnpacker(BaseUnpacker):
             if rx.has_cyrillic(line):
                 LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: General")
                 text = line[:-1] if line.endswith("\n") else line
-                self.line_mapping.append(str(index) + dl.MULTILINE_GENERAL + "\n")
+                self.line_mapping.append(str(index) + dl.XML_MULTILINE_GENERAL + "\n")
                 self.corpus.append(text + "\n")
             try:
                 index, line = next(line_iter)
@@ -73,6 +84,6 @@ class XMLUnpacker(BaseUnpacker):
         text_end = match_end.groups()[0]
         if text_end and rx.has_cyrillic(text_end):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Multiline: End")
-            self.line_mapping.append(str(index) + dl.MULTILINE_END + "\n")
+            self.line_mapping.append(str(index) + dl.XML_MULTILINE_END + "\n")
             self.corpus.append(text_end + "\n")
 
