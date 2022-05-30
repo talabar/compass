@@ -54,6 +54,7 @@ TRANSLATOR = {
     re.compile(r"Pussy"): "Gut",
     re.compile(r"Shooter"): "Strelok",
     re.compile(r"[Ss]words?man"): "Marked One",
+    re.compile(r"Strelka"): "Strelok",
     re.compile(r"^Download$"): "Load",
     re.compile(r"^Swabbed$"): "Marked One",
     re.compile(r"^Titles$"): "Credits",

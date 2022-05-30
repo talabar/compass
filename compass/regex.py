@@ -2,6 +2,7 @@ import re
 
 CIPHER_LTX_INV_NAME = re.compile(r"^(\d+):LIN:$")
 CIPHER_SCRIPT = re.compile(r"^(\d+)_(\d+)$")
+CIPHER_XML_ARTICLE_NAME = re.compile(r"^(\d+):XAN:$")
 CIPHER_XML_CATCH_ALL = re.compile(r"^(\d+):XCA:$")
 CIPHER_XML_TEXT_SIMPLE = re.compile(r"^(\d+):XSL:$")
 CIPHER_XML_TEXT_MULTILINE_GENERAL = re.compile(r"^(\d+):XML:$")

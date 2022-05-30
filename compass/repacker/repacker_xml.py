@@ -21,6 +21,8 @@ class XMLRepacker(BaseRepacker):
                 line = contents[line_number - 1]
                 if line_type is TranslateType.XML_TEXT_SIMPLE:
                     line_translate = self._text_replace(rx.XML_TEXT_SIMPLE, text, line)
+                elif line_type is TranslateType.XML_ARTICLE_NAME:
+                    line_translate = self._text_replace(rx.XML_ARTICLE_NAME, text, line)
                 elif line_type is TranslateType.XML_CATCH_ALL:
                     line_translate = self._text_replace(rx.XML_CATCH_ALL, text, line)
                 elif line_type is TranslateType.XML_TEXT_MULTILINE_GENERAL:

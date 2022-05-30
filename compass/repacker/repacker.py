@@ -58,6 +58,11 @@ class Repacker:
                 # Create new outer dictionary entry
                 current_file = row_mapping.split()[1]
                 cipher[current_file] = {}
+            elif rx.CIPHER_XML_ARTICLE_NAME.match(row_mapping):
+                match = rx.CIPHER_XML_ARTICLE_NAME.match(row_mapping)
+                index = int(match.groups(1)[0])
+                line_type = TranslateType.XML_ARTICLE_NAME
+                cipher[current_file][index] = (line_type, row_corpus[:-1])
             elif rx.CIPHER_XML_CATCH_ALL.match(row_mapping):
                 match = rx.CIPHER_XML_CATCH_ALL.match(row_mapping)
                 index = int(match.groups(1)[0])
