@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import List, Match
 
+from compass import delimiter as dl
 from compass import regex as rx
 from compass.unpacker.unpacker_base import BaseUnpacker
 from compass.util import get_file_paths
@@ -26,5 +27,5 @@ class LTXUnpacker(BaseUnpacker):
 
         if rx.has_cyrillic(text):
             LOGGER.debug(f"|{self.stem}| [{index}] Match - Inv Name")
-            self.line_mapping.append(str(index) + "\n")
+            self.line_mapping.append(str(index) + dl.LTX_INV_NAME + "\n")
             self.corpus.append(text + "\n")

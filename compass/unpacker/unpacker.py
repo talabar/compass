@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
 
 
-class Unpacker:
+class UnpackerManager:
     def __init__(self, root: Path, output_stem: str):
         self.root = root
         self.filename_mapping = output_stem + "_mapping.txt"
@@ -28,8 +28,10 @@ class Unpacker:
         mapping = mapping_xml + mapping_ltx + mapping_script
         corpus = corpus_xml + corpus_ltx + corpus_script
 
-        with open(self.filename_mapping, "w+", encoding="windows-1251") as fp:
+        # with open(self.filename_mapping, "w+", encoding="windows-1251") as fp:
+        with open(self.filename_mapping, "w+", encoding="utf-8") as fp:
             fp.writelines(mapping)
 
-        with open(self.filename_corpus, "w+", encoding="windows-1251") as fp:
+        # with open(self.filename_corpus, "w+", encoding="windows-1251") as fp:
+        with open(self.filename_corpus, "w+", encoding="utf-8") as fp:
             fp.writelines(corpus)

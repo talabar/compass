@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from compass.unpacker.unpacker import Unpacker
+from compass.unpacker.unpacker import UnpackerManager
 
 
 def run():
@@ -20,7 +20,7 @@ def run():
         required=True,
     )
     args = parser.parse_args()
-    unpacker = Unpacker(args.root, args.outfile)
+    unpacker = UnpackerManager(args.root, args.outfile)
     unpacker.unpack()
 
 

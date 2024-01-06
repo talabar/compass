@@ -52,8 +52,6 @@ class Repacker:
             row_mapping = next(iter_mapping)
             row_corpus = next(iter_corpus)
 
-            row_corpus = row_corpus.replace(dl.NEWLINE_PADDED, "\\n")
-
             if re.match(dl.FILE, row_mapping):
                 # Create new outer dictionary entry
                 current_file = row_mapping.split()[1]
@@ -124,15 +122,10 @@ class Repacker:
     @staticmethod
     def pre_process(corpus: List[str]):
         for idx, text in enumerate(corpus):
-
-            # Fix Common DeepL Translation Quirks
-            for find, repl in DEEPL_ERRORS.items():
-                corpus[idx] = re.sub(find, repl, corpus[idx])
-
-            # Strip out Whitespace Buffer where appropriate
-            corpus[idx] = re.sub(r"(\s*REPL_NEWLINE\s*)", lambda match: match.group(0).strip(), corpus[idx])
-            corpus[idx] = re.sub(rx.GENERAL_PERCENT_C_PADDED, lambda match: match.group(0).strip(), corpus[idx])
-
             # Hydrate Replacement Vars
             corpus[idx] = corpus[idx].replace(dl.NEWLINE_ESCAPE, "\\\\n")
             corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION_ESCAPE, "\\\"")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\"")
+            corpus[idx] = corpus[idx].replace(dl.GUILLEMET_LEFT, "«")
+            corpus[idx] = corpus[idx].replace(dl.GUILLEMET_RIGHT, "»")

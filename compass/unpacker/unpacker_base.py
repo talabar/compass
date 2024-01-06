@@ -55,18 +55,16 @@ class BaseUnpacker(ABC):
 
     def post_process(self):
         for idx, text in enumerate(self.corpus):
-            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE_PADDED)
-            self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE_PADDED)
-            self.corpus[idx] = re.sub(rx.GENERAL_PERCENT_C, lambda match: " " + match.group(0) + " ", self.corpus[idx])
+            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE)
+            # Condition needed to avoid mistaking newlines for file paths (i.e. kotovod\new_compass.script)
+            if not self.corpus[idx].startswith("FILE"):
+                self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE)
 
-            # DELETE QUOTES - DEEPL SUCKS AT HANDLING THEM
-            self.corpus[idx] = self.corpus[idx].replace("\\\"", "")
-            self.corpus[idx] = self.corpus[idx].replace("\"", "")
+            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_ESCAPE)
+            self.corpus[idx] = self.corpus[idx].replace("\"", dl.QUOTATION)
 
-            for russian_text, english_translation in GLOSSARY.items():
-                self.corpus[idx] = re.sub(russian_text, english_translation, self.corpus[idx])
-
-            for russian_text, english_translation in GLOSSARY_MATCH.items():
-                self.corpus[idx] = re.sub(
-                    russian_text, lambda match: english_translation + match.group(1), self.corpus[idx]
-                )
+            # A guillemet is a type of quotation used in various languages (including russian)
+            # Translation engines often replace these with quotes, and it is difficult to stop that behavior
+            # Important to include these as to not break scripting (that uses regular quotes as part of the code)
+            self.corpus[idx] = self.corpus[idx].replace("«", dl.GUILLEMET_LEFT)
+            self.corpus[idx] = self.corpus[idx].replace("»", dl.GUILLEMET_RIGHT)

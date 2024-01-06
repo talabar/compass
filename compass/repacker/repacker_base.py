@@ -27,10 +27,11 @@ class BaseRepacker(ABC):
         # Generate all subdirectories from output root
         write_path.parents[0].mkdir(parents=True, exist_ok=True)
 
-        with open(write_path, "w+", encoding="windows-1251") as fp:
+        with open(write_path, "w+", encoding="utf-8") as fp:
             fp.writelines(contents)
 
     def get_base_contents(self, filename: str):
+        print(filename)
         filename_base = None
         for filename_candidate in self.filenames_base:
             if str(filename_candidate.resolve()).endswith(filename):
@@ -40,7 +41,7 @@ class BaseRepacker(ABC):
         if not filename_base:
             raise Exception(f"File Not Found: {filename}")
 
-        with open(filename_base, "r", encoding="windows-1251") as fp:
+        with open(filename_base, "r", encoding="windows-1251", errors="ignore") as fp:
             contents_base = fp.readlines()
 
         return contents_base
