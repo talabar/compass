@@ -35,7 +35,7 @@ def run():
 
     with open(args.mapping, "r", encoding="windows-1251") as fp:
         mapping = fp.readlines()
-    with open(args.text, "r", encoding="windows-1251", errors="ignore") as fp:
+    with open(args.text, "r", encoding="windows-1251") as fp:
         text = fp.readlines()
 
     repacker = Repacker(args.root, mapping, text, args.outdir)
