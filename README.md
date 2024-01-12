@@ -29,3 +29,6 @@ The repacker then "glues together" the information from both files to generate a
 
 Comparing the original files with the COMPASS result files, the files should luck structurally identical.
 The only differences should be all Russian text has been translated to English.
+
+# pygpt
+Interfaces with GPT API's via OpenAI's python library. Used exclusively for translation of S.T.A.L.K.E.R. gamefiles.

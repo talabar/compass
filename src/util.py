@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 
 def get_file_paths(path: Path, ext: str):
@@ -21,3 +21,10 @@ def get_file_title(path: Path, root: Path):
     parts_sliced = parts[idx:]
     title = os.path.sep.join(parts_sliced)
     return title
+
+
+def print_dict_as_prompt(dict_raw: dict, prefix: Optional[str] = None):
+    prompt: str = prefix
+    for key, val in dict_raw.items():
+        prompt += f"{key} = {val}, "
+    return prompt[:-2] + "\n"

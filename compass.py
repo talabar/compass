@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 
+from src.gpt import GPTTranslator
 from src.unpacker.unpacker_manager import UnpackerManager
 from src.repacker.repacker_manager import RepackerManager
 
@@ -58,24 +59,57 @@ def get_args():
         help="Path of translated file",
     )
 
+    # GPT
+    gpt = subparsers.add_parser("gpt")
+    parser.add_argument(
+        "-raw",
+        "--rawfile",
+        help="Corpus text file to be translated (line by line)",
+        dest="rawfile",
+        type=Path,
+        required=True,
+    )
+    parser.add_argument(
+        "-out",
+        "--outfile",
+        help="Output file to store translated text (line by line)",
+        type=Path,
+        dest="outfile",
+        required=True,
+    )
+    parser.add_argument(
+        "-ls",
+        "--linestart",
+        help="Line number with which to start processing (inclusive)",
+        dest="start",
+        type=int,
+        default=0,
+        required=False,
+    )
+    parser.add_argument(
+        "-le",
+        "--lineend",
+        help="Line number with which to stop processing (exclusive)",
+        dest="end",
+        type=int,
+        required=False,
+    )
+
     return vars(parser.parse_args())
 
 
 def dispatch(params: dict):
     action = params.pop("action")
     if action == "unpack":
-        start_unpack(**params)
+        unpacker = UnpackerManager(**params)
+        unpacker.unpack()
     if action == "repack":
         start_repack(**params)
     if action == "gpt":
-        start_gpt(**params)
+        gpt = GPTTranslator(**params)
+        gpt.translate()
     if action == "audit":
-        start_audit(**params)
-
-
-def start_unpack(dir_root: Path, prefix_output: str):
-    unpacker = UnpackerManager(dir_root, prefix_output)
-    unpacker.unpack()
+        pass
 
 
 def start_repack(dir_root: Path, dir_output: Path, file_map: Path, file_translate: Path):
@@ -86,14 +120,6 @@ def start_repack(dir_root: Path, dir_output: Path, file_map: Path, file_translat
 
     repacker = RepackerManager(dir_root, content_map, content_translate, dir_output)
     repacker.repack()
-
-
-def start_gpt(**kwargs):
-    pass
-
-
-def start_audit(**kwargs):
-    pass
 
 
 if __name__ == "__main__":
