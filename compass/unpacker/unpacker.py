@@ -28,10 +28,8 @@ class UnpackerManager:
         mapping = mapping_xml + mapping_ltx + mapping_script
         corpus = corpus_xml + corpus_ltx + corpus_script
 
-        # with open(self.filename_mapping, "w+", encoding="windows-1251") as fp:
-        with open(self.filename_mapping, "w+", encoding="utf-8") as fp:
+        with open(self.filename_mapping, "w+", encoding="windows-1251") as fp:
             fp.writelines(mapping)
 
-        # with open(self.filename_corpus, "w+", encoding="windows-1251") as fp:
-        with open(self.filename_corpus, "w+", encoding="utf-8") as fp:
+        with open(self.filename_corpus, "w+", encoding="windows-1251") as fp:
             fp.writelines(corpus)
