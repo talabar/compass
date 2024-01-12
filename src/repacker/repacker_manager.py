@@ -3,26 +3,25 @@ from pathlib import Path
 import re
 from typing import List
 
-from compass import delimiter as dl
-from compass import regex as rx
-from compass.datatype import Cipher, TranslateType
-from compass.glossary import DEEPL_ERRORS
-from compass.repacker.repacker_ltx import LTXRepacker
-from compass.repacker.repacker_xml import XMLRepacker
-from compass.repacker.repacker_script import ScriptRepacker
-from compass.util import get_file_paths
+from src import delimiter as dl
+from src import regex as rx
+from src.datatype import Cipher, TranslateType
+from src.repacker.repacker_ltx import LTXRepacker
+from src.repacker.repacker_xml import XMLRepacker
+from src.repacker.repacker_script import ScriptRepacker
+from src.util import get_file_paths
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
 
 
-class Repacker:
-    def __init__(self, root: Path, mapping: List[str], corpus: List[str], output_root: str):
+class RepackerManager:
+    def __init__(self, root: Path, mapping: List[str], corpus: List[str], output_root: Path):
 
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
         self.filenames_script: List[Path] = get_file_paths(root, ".script")
-        self.output_root = output_root
+        self.output_root: Path = output_root
 
         self.cipher: Cipher = self.create_cipher(mapping, corpus)
 

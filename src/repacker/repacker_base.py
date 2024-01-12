@@ -1,17 +1,16 @@
 from abc import ABC, abstractmethod
 import logging
-import os
 from pathlib import Path
 import re
 from typing import List
 
-from compass.datatype import Cipher
+from src.datatype import Cipher
 
 LOGGER = logging.getLogger(__name__)
 
 
 class BaseRepacker(ABC):
-    def __init__(self, filenames: List[Path], cipher: Cipher, output_root: str):
+    def __init__(self, filenames: List[Path], cipher: Cipher, output_root: Path):
         self.filenames_base = filenames
         self.cipher = cipher
         self.output_root = output_root
@@ -22,7 +21,7 @@ class BaseRepacker(ABC):
 
     def write_contents(self, filename: str, contents: List[str]):
         # Prepend Output Root to Filename
-        write_path = Path(self.output_root + os.path.sep + filename)
+        write_path = self.output_root / filename
 
         # Generate all subdirectories from output root
         write_path.parents[0].mkdir(parents=True, exist_ok=True)

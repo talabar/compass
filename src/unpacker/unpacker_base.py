@@ -1,13 +1,10 @@
 from abc import ABC, abstractmethod
 import logging
 from pathlib import Path
-import re
 from typing import List, Tuple
 
-from compass import delimiter as dl
-from compass import regex as rx
-from compass.glossary import GLOSSARY, GLOSSARY_MATCH
-from compass.util import get_file_title
+from src import delimiter as dl
+from src.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
 

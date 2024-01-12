@@ -2,10 +2,10 @@ import logging
 from pathlib import Path
 from typing import List, Match
 
-from compass import delimiter as dl
-from compass import regex as rx
-from compass.unpacker.unpacker_base import BaseUnpacker
-from compass.util import get_file_paths
+from src import delimiter as dl
+from src import regex as rx
+from src.unpacker.unpacker_base import BaseUnpacker
+from src.util import get_file_paths
 
 LOGGER = logging.getLogger(__name__)
 

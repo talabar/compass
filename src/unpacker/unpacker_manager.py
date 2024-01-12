@@ -1,9 +1,9 @@
 import logging
 from pathlib import Path
 
-from compass.unpacker.unpacker_ltx import LTXUnpacker
-from compass.unpacker.unpacker_xml import XMLUnpacker
-from compass.unpacker.unpacker_script import ScriptUnpacker
+from src.unpacker.unpacker_ltx import LTXUnpacker
+from src.unpacker.unpacker_xml import XMLUnpacker
+from src.unpacker.unpacker_script import ScriptUnpacker
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
