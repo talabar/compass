@@ -10,15 +10,14 @@ from src.util import print_dict_as_prompt
 
 
 class GPTTranslator:
-    def __init__(self, infile: Path, outfile: Path, line_start: int, line_end: Optional[int] = None):
-        self.infile = infile
-        self.outfile = outfile
+    def __init__(self, file_raw: Path, file_translate: Path, line_start: int, line_end: Optional[int] = None):
+        self.file_raw = file_raw
+        self.file_translate = file_translate
 
         self.client = OpenAI()
         self.cache = {}
-        # self.cursor_in: TextIOWrapper = open(self.infile, "r", encoding="windows-1251")
-        self.cursor_in: TextIOWrapper = open(self.infile, "r", encoding="utf-8")
-        self.cursor_out: TextIOWrapper = open(self.outfile, "a", encoding="utf-8")
+        self.cursor_in: TextIOWrapper = open(self.file_raw, "r", encoding="windows-1251")
+        self.cursor_out: TextIOWrapper = open(self.file_translate, "a", encoding="windows-1251")
 
         self.static_system_prompt = (
             "Translate Russian to English.\n"

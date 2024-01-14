@@ -1,6 +1,9 @@
 import argparse
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+from src.auditor import XMLAuditor
 from src.gpt import GPTTranslator
 from src.unpacker.unpacker_manager import UnpackerManager
 from src.repacker.repacker_manager import RepackerManager
@@ -61,38 +64,57 @@ def get_args():
 
     # GPT
     gpt = subparsers.add_parser("gpt")
-    parser.add_argument(
+    gpt.add_argument(
         "-raw",
-        "--rawfile",
+        "--file_raw",
         help="Corpus text file to be translated (line by line)",
-        dest="rawfile",
+        dest="file_raw",
         type=Path,
         required=True,
     )
-    parser.add_argument(
-        "-out",
-        "--outfile",
+    gpt.add_argument(
+        "-trans",
+        "--file_translate",
         help="Output file to store translated text (line by line)",
         type=Path,
-        dest="outfile",
+        dest="file_translate",
         required=True,
     )
-    parser.add_argument(
+    gpt.add_argument(
         "-ls",
-        "--linestart",
+        "--line_start",
         help="Line number with which to start processing (inclusive)",
         dest="start",
         type=int,
         default=0,
         required=False,
     )
-    parser.add_argument(
+    gpt.add_argument(
         "-le",
-        "--lineend",
+        "--line_end",
         help="Line number with which to stop processing (exclusive)",
         dest="end",
         type=int,
         required=False,
+    )
+
+    # AUDIT
+    audit = subparsers.add_parser("audit")
+    audit.add_argument(
+        "-base",
+        "--dir_base",
+        dest="dir_base",
+        type=Path,
+        required=True,
+        help="Top directory of base game data",
+    )
+    audit.add_argument(
+        "-trans",
+        "--dir_translate",
+        dest="dir_translate",
+        type=Path,
+        required=True,
+        help="Top directory of translated game data",
     )
 
     return vars(parser.parse_args())
@@ -109,7 +131,8 @@ def dispatch(params: dict):
         gpt = GPTTranslator(**params)
         gpt.translate()
     if action == "audit":
-        pass
+        xml_auditor = XMLAuditor(**params)
+        xml_auditor.audit()
 
 
 def start_repack(dir_root: Path, dir_output: Path, file_map: Path, file_translate: Path):
@@ -123,4 +146,5 @@ def start_repack(dir_root: Path, dir_output: Path, file_map: Path, file_translat
 
 
 if __name__ == "__main__":
+    load_dotenv()
     run()

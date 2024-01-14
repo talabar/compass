@@ -11,13 +11,13 @@ LOGGER = logging.getLogger(__name__)
 
 class BaseUnpacker(ABC):
     def __init__(self, root: Path):
-        self.root = root
-        self.stem = None
-        self.line_mapping = []
-        self.corpus = []
+        self.root: Path = root
+        self.stem: str = None
+        self.line_mapping: List[str] = []
+        self.corpus: List[str] = []
 
         # Set by Subclass
-        self.filenames = []
+        self.filenames: List[Path] = []
 
     def unpack(self) -> Tuple[List[str], List[str]]:
         LOGGER.info(f"{self.__class__.__name__} Starting...")
@@ -38,6 +38,7 @@ class BaseUnpacker(ABC):
             self.unpack_file_contents(file_contents)
 
             if self.line_mapping[-1] == file_title:
+                LOGGER.debug(f"|{filename.parts[-1]}| Nothing to Unpack")
                 self.line_mapping.pop()
                 self.corpus.pop()
             else:
