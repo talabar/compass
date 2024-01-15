@@ -22,7 +22,7 @@ def get_args():
     unpack = subparsers.add_parser("unpack")
     unpack.add_argument(
         "-root",
-        dest="dir_root",
+        dest="root",
         type=Path,
         required=True,
         help="Parent directory containing desired translation files",
@@ -38,14 +38,14 @@ def get_args():
     repack = subparsers.add_parser("repack")
     repack.add_argument(
         "-root",
-        dest="dir_root",
+        dest="root",
         type=Path,
         required=True,
         help="Path of parent directory containing untranslated gamedata files",
     )
     repack.add_argument(
         "-out",
-        dest="dir_output",
+        dest="output",
         required=True,
         help="Path of to-be-translated gamedata files",
     )
@@ -84,7 +84,7 @@ def get_args():
         "-ls",
         "--line_start",
         help="Line number with which to start processing (inclusive)",
-        dest="start",
+        dest="line_start",
         type=int,
         default=0,
         required=False,
@@ -93,7 +93,7 @@ def get_args():
         "-le",
         "--line_end",
         help="Line number with which to stop processing (exclusive)",
-        dest="end",
+        dest="line_end",
         type=int,
         required=False,
     )

@@ -10,10 +10,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 class UnpackerManager:
-    def __init__(self, root: Path, output_stem: str):
+    def __init__(self, root: Path, prefix_output: str):
         self.root = root
-        self.filename_mapping = output_stem + "_mapping.txt"
-        self.filename_corpus = output_stem + "_corpus.txt"
+        self.filename_mapping = prefix_output + "_mapping.txt"
+        self.filename_corpus = prefix_output + "_corpus.txt"
 
     def unpack(self):
         xml_unpacker = XMLUnpacker(self.root)
