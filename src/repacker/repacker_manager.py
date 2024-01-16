@@ -3,26 +3,25 @@ from pathlib import Path
 import re
 from typing import List
 
-from compass import delimiter as dl
-from compass import regex as rx
-from compass.datatype import Cipher, TranslateType
-from compass.glossary import DEEPL_ERRORS
-from compass.repacker.repacker_ltx import LTXRepacker
-from compass.repacker.repacker_xml import XMLRepacker
-from compass.repacker.repacker_script import ScriptRepacker
-from compass.util import get_file_paths
+from src import delimiter as dl
+from src import regex as rx
+from src.datatype import Cipher, TranslateType
+from src.repacker.repacker_ltx import LTXRepacker
+from src.repacker.repacker_xml import XMLRepacker
+from src.repacker.repacker_script import ScriptRepacker
+from src.util import get_file_paths
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
 
 
-class Repacker:
-    def __init__(self, root: Path, mapping: List[str], corpus: List[str], output_root: str):
+class RepackerManager:
+    def __init__(self, root: Path, mapping: List[str], corpus: List[str], output_root: Path):
 
         self.filenames_xml: List[Path] = get_file_paths(root, ".xml")
         self.filenames_ltx: List[Path] = get_file_paths(root, ".ltx")
         self.filenames_script: List[Path] = get_file_paths(root, ".script")
-        self.output_root = output_root
+        self.output_root: Path = output_root
 
         self.cipher: Cipher = self.create_cipher(mapping, corpus)
 
@@ -51,8 +50,6 @@ class Repacker:
         while counter < num_lines:
             row_mapping = next(iter_mapping)
             row_corpus = next(iter_corpus)
-
-            row_corpus = row_corpus.replace(dl.NEWLINE_PADDED, "\\n")
 
             if re.match(dl.FILE, row_mapping):
                 # Create new outer dictionary entry
@@ -124,15 +121,10 @@ class Repacker:
     @staticmethod
     def pre_process(corpus: List[str]):
         for idx, text in enumerate(corpus):
-
-            # Fix Common DeepL Translation Quirks
-            for find, repl in DEEPL_ERRORS.items():
-                corpus[idx] = re.sub(find, repl, corpus[idx])
-
-            # Strip out Whitespace Buffer where appropriate
-            corpus[idx] = re.sub(r"(\s*REPL_NEWLINE\s*)", lambda match: match.group(0).strip(), corpus[idx])
-            corpus[idx] = re.sub(rx.GENERAL_PERCENT_C_PADDED, lambda match: match.group(0).strip(), corpus[idx])
-
             # Hydrate Replacement Vars
             corpus[idx] = corpus[idx].replace(dl.NEWLINE_ESCAPE, "\\\\n")
             corpus[idx] = corpus[idx].replace(dl.NEWLINE, "\\n")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION_ESCAPE, "\\\"")
+            corpus[idx] = corpus[idx].replace(dl.QUOTATION, "\"")
+            corpus[idx] = corpus[idx].replace(dl.GUILLEMET_LEFT, "«")
+            corpus[idx] = corpus[idx].replace(dl.GUILLEMET_RIGHT, "»")

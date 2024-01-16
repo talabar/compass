@@ -1,9 +1,9 @@
 import logging
 import re
 
-from compass import regex as rx
-from compass.datatype import TranslateType
-from compass.repacker.repacker_base import BaseRepacker
+from src import regex as rx
+from src.datatype import TranslateType
+from src.repacker.repacker_base import BaseRepacker
 
 LOGGER = logging.getLogger(__name__)
 

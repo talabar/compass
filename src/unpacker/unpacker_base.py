@@ -1,26 +1,23 @@
 from abc import ABC, abstractmethod
 import logging
 from pathlib import Path
-import re
 from typing import List, Tuple
 
-from compass import delimiter as dl
-from compass import regex as rx
-from compass.glossary import GLOSSARY, GLOSSARY_MATCH
-from compass.util import get_file_title
+from src import delimiter as dl
+from src.util import get_file_title
 
 LOGGER = logging.getLogger(__name__)
 
 
 class BaseUnpacker(ABC):
     def __init__(self, root: Path):
-        self.root = root
-        self.stem = None
-        self.line_mapping = []
-        self.corpus = []
+        self.root: Path = root
+        self.stem: str = None
+        self.line_mapping: List[str] = []
+        self.corpus: List[str] = []
 
         # Set by Subclass
-        self.filenames = []
+        self.filenames: List[Path] = []
 
     def unpack(self) -> Tuple[List[str], List[str]]:
         LOGGER.info(f"{self.__class__.__name__} Starting...")
@@ -41,6 +38,7 @@ class BaseUnpacker(ABC):
             self.unpack_file_contents(file_contents)
 
             if self.line_mapping[-1] == file_title:
+                LOGGER.debug(f"|{filename.parts[-1]}| Nothing to Unpack")
                 self.line_mapping.pop()
                 self.corpus.pop()
             else:
@@ -55,18 +53,16 @@ class BaseUnpacker(ABC):
 
     def post_process(self):
         for idx, text in enumerate(self.corpus):
-            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE_PADDED)
-            self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE_PADDED)
-            self.corpus[idx] = re.sub(rx.GENERAL_PERCENT_C, lambda match: " " + match.group(0) + " ", self.corpus[idx])
+            self.corpus[idx] = self.corpus[idx].replace("\\\\n", dl.NEWLINE_ESCAPE)
+            # Condition needed to avoid mistaking newlines for file paths (i.e. kotovod\new_compass.script)
+            if not self.corpus[idx].startswith("FILE"):
+                self.corpus[idx] = self.corpus[idx].replace("\\n", dl.NEWLINE)
 
-            # DELETE QUOTES - DEEPL SUCKS AT HANDLING THEM
-            self.corpus[idx] = self.corpus[idx].replace("\\\"", "")
-            self.corpus[idx] = self.corpus[idx].replace("\"", "")
+            self.corpus[idx] = self.corpus[idx].replace("\\\"", dl.QUOTATION_ESCAPE)
+            self.corpus[idx] = self.corpus[idx].replace("\"", dl.QUOTATION)
 
-            for russian_text, english_translation in GLOSSARY.items():
-                self.corpus[idx] = re.sub(russian_text, english_translation, self.corpus[idx])
-
-            for russian_text, english_translation in GLOSSARY_MATCH.items():
-                self.corpus[idx] = re.sub(
-                    russian_text, lambda match: english_translation + match.group(1), self.corpus[idx]
-                )
+            # A guillemet is a type of quotation used in various languages (including russian)
+            # Translation engines often replace these with quotes, and it is difficult to stop that behavior
+            # Important to include these as to not break scripting (that uses regular quotes as part of the code)
+            self.corpus[idx] = self.corpus[idx].replace("«", dl.GUILLEMET_LEFT)
+            self.corpus[idx] = self.corpus[idx].replace("»", dl.GUILLEMET_RIGHT)

@@ -18,6 +18,7 @@ SCRIPT_COMMENT = re.compile(r"\s*--|\s*#")
 SCRIPT_DBG = re.compile(r"~C0C|\[~T|#DBG")
 SCRIPT_SIMPLE = re.compile(r'"((?:[^"\\]|\\.)*)"')
 
+XML_ID = re.compile(r"id=\"(.+?)\"")
 XML_ARTICLE_NAME = re.compile(r"<article\s.+?name=\"(.+?)\".*?>")
 XML_CATCH_ALL = re.compile(r">(.*)</")
 XML_TEXT_SIMPLE = re.compile(r"<text>(.*)</text>")
